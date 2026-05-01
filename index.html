@@ -348,18 +348,7 @@
   document.querySelectorAll('.menu-card,.popular-item,.voice-card,.gallery-item').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(24px)';el.style.transition='opacity 0.7s ease,transform 0.7s ease';obs.observe(el)});
 </script>
 
-${(()=>{
-  const sd = {
-    "@context":"https://schema.org",
-    "@type":"BeautySalon",
-    "name":"${esc(d.salonName)}"
-    ${d.address?',"address":{"@type":"PostalAddress","streetAddress":"${esc(d.address)}","addressCountry":"JP"}':""}
-    ${d.tel?',"telephone":"${esc(d.tel)}"':""}
-    ${d.hours?',"openingHours":"${esc(d.hours)}"':""}
-    ${d.siteUrl?',"url":"${esc(d.siteUrl)}"':""}
-    ${d.hotpepper?',"sameAs":"${esc(d.hotpepper)}"':""}
-  };
-  return `<script type="application/ld+json">${JSON.stringify(sd)}</` + `script>`;
-})()}
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BeautySalon","name":"Merlia","address":{"@type":"PostalAddress","streetAddress":"〒781-0821\n高知市桜井町1-3-36 LB-1 2F\nRUELLE内","addressCountry":"JP"},"telephone":"090-2825-8969","openingHours":"09:30 – 19:00","url":"https://merlia.jp","sameAs":"http://beauty.hotpepper.jp/kr/slnH000360616"}</script>
 </body>
 </html>
