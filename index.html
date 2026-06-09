@@ -110,6 +110,18 @@
     .stars{color:var(--accent);font-size:16px;letter-spacing:3px;margin-bottom:16px}
     .voice-text{font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:2;color:#555;margin-bottom:20px}
     .voice-author{font-size:11px;letter-spacing:0.15em;color:var(--accent)}
+    .faq{padding:100px 0;background:var(--white)}
+    .faq-inner{max-width:800px;margin:0 auto;padding:0 40px}
+    .faq-header{text-align:center;margin-bottom:56px}
+    .faq-list{border-top:1px solid var(--border)}
+    .faq-item{border-bottom:1px solid var(--border)}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;width:100%;padding:22px 0;background:none;border:none;cursor:pointer;text-align:left;font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:300;color:var(--primary);letter-spacing:0.04em;gap:16px}
+    .faq-q span{flex:1;line-height:1.6}
+    .faq-arrow{flex-shrink:0;transition:transform 0.3s;color:var(--accent)}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+    .faq-item.open .faq-a{max-height:600px}
+    .faq-a p{padding:0 0 22px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:#555;line-height:1.9;font-weight:300}
     .access{background:var(--white)}
     .access-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
     /* ★ マップを固定高さで確実に収める */
@@ -275,6 +287,39 @@
 
 
 
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">よくある質問</h2>
+      <div class="divider" style="margin:20px auto;"></div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="var p=this.parentElement;var open=p.classList.toggle('open');this.setAttribute('aria-expanded',open)" aria-expanded="false">
+          <span>どのような施術メニューがありますか？</span>
+          <svg class="faq-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>脱毛・ピーリング・フェムケア・ネイルなど、内側から輝く美しさをサポートする施術を取り揃えています。詳しくはメニューページをご覧ください。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="var p=this.parentElement;var open=p.classList.toggle('open');this.setAttribute('aria-expanded',open)" aria-expanded="false">
+          <span>予約方法を教えてください。</span>
+          <svg class="faq-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Instagram DM または LINE 公式アカウントからご予約いただけます。ホットペッパービューティーからもご予約可能です。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="var p=this.parentElement;var open=p.classList.toggle('open');this.setAttribute('aria-expanded',open)" aria-expanded="false">
+          <span>完全個室のサロンですか？</span>
+          <svg class="faq-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>はい、完全個室のプライベートサロンです。他のお客様と顔を合わせることなく、リラックスしてお過ごしいただけます。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="line-cta">
   <div class="line-cta-inner">
     <svg class="line-cta-icon" width="64" height="64" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
@@ -350,6 +395,7 @@
 </script>
 
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BeautySalon","name":"Merlia","address":{"@type":"PostalAddress","streetAddress":"〒781-0821\n高知市桜井町1-3-36 LB-1 2F\nRUELLE内","addressCountry":"JP"},"telephone":"090-2825-8969","openingHours":"09:30 – 19:00","url":"https://merlia.jp","sameAs":"http://beauty.hotpepper.jp/kr/slnH000360616"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BeautySalon","name":"Merlia","address":{"@type":"PostalAddress","streetAddress":"〒781-0821\n高知市桜井町1-3-36 LB-1 2F\nRUELLE内","addressCountry":"JP"},"telephone":"090-2825-8969","openingHours":"09:30 – 19:00","url":"https://merlia.jp","sameAs":"http://beauty.hotpepper.jp/kr/slnH000360616","aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"3","bestRating":"5","worstRating":"1"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"どのような施術メニューがありますか？","acceptedAnswer":{"@type":"Answer","text":"脱毛・ピーリング・フェムケア・ネイルなど、内側から輝く美しさをサポートする施術を取り揃えています。詳しくはメニューページをご覧ください。"}},{"@type":"Question","name":"予約方法を教えてください。","acceptedAnswer":{"@type":"Answer","text":"Instagram DM または LINE 公式アカウントからご予約いただけます。ホットペッパービューティーからもご予約可能です。"}},{"@type":"Question","name":"完全個室のサロンですか？","acceptedAnswer":{"@type":"Answer","text":"はい、完全個室のプライベートサロンです。他のお客様と顔を合わせることなく、リラックスしてお過ごしいただけます。"}}]}</script>
 </body>
 </html>

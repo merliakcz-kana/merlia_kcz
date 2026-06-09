@@ -134,6 +134,7 @@
       <div class="nav-item"        data-sec="feature"><span class="ic">◈</span> サロンの特徴</div>
       <div class="nav-item"        data-sec="gallery"><span class="ic">📷</span> ギャラリー</div>
       <div class="nav-item"        data-sec="voice">  <span class="ic">💬</span> お客様の声</div>
+      <div class="nav-item"        data-sec="faq">    <span class="ic">❓</span> よくある質問</div>
       <div class="nav-item"        data-sec="footer"> <span class="ic">▤</span> フッター</div>
       <div class="nav-item"        data-sec="fonts">  <span class="ic">🔤</span> フォント設定</div>
       <div class="nav-item"        data-sec="seo">   <span class="ic">🔍</span> SEO設定</div>
@@ -373,6 +374,26 @@ RUELLE内</textarea>
       </div>
     </div>
 
+    <!-- よくある質問 -->
+    <div class="section" id="sec-faq">
+      <div class="sec-hd">
+        <div class="sec-hd-text"><h1>よくある質問</h1><p>FAQ セクションの質問と回答を編集します（AIO 対策・構造化データに自動反映）</p></div>
+        <label class="vis-toggle" title="サイトへの表示・非表示を切り替え"><input type="checkbox" id="vis_faq" checked onchange="saveData()"><span class="vis-knob"></span><span class="vis-label">サイトに表示</span></label>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent);background:#fdfcfa;">
+        <p style="font-size:12px;color:#666;line-height:1.9;">
+          <strong style="color:var(--accent);">✦ AIO 対策について</strong><br>
+          ここに入力した Q&amp;A は <strong>FAQPage 構造化データ（Schema.org）</strong>として HTML に埋め込まれます。<br>
+          Google の AI Overview（AIO）は構造化 FAQ を優先的に参照するため、よく聞かれる質問を登録しておくと検索結果に引用される可能性が高まります。
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">FAQ 一覧</div>
+        <div class="feat-list" id="faqList"></div>
+        <button class="btn-add-menu" onclick="addFaq()">＋ Q&amp;A を追加</button>
+      </div>
+    </div>
+
     <!-- フォント設定 -->
     <div class="section" id="sec-fonts">
       <div class="sec-hd"><h1>フォント設定</h1><p>出力するHTMLで使用するフォントを用途別に設定します</p></div>
@@ -594,6 +615,46 @@ let voices = [
   {stars:5, text:'フェムケアを初めて受けました。丁寧に説明してくれて安心できました。効果も実感しています。また来ます！',                 author:'20代 女性'},
   {stars:5, text:'脱毛でお世話になっています。施術後は肌がとても滑らかになりました。丁寧な対応で毎回安心して通えています。',              author:'40代 女性'},
 ];
+
+/* ===== FAQ ===== */
+let faqs = [
+  {q:'どのような施術メニューがありますか？', a:'脱毛・ピーリング・フェムケア・ネイルなど、内側から輝く美しさをサポートする施術を取り揃えています。詳しくはメニューページをご覧ください。'},
+  {q:'予約方法を教えてください。', a:'Instagram DM または LINE 公式アカウントからご予約いただけます。ホットペッパービューティーからもご予約可能です。'},
+  {q:'完全個室のサロンですか？', a:'はい、完全個室のプライベートサロンです。他のお客様と顔を合わせることなく、リラックスしてお過ごしいただけます。'},
+];
+function syncFaqValues() {
+  faqs = faqs.map((_, i) => ({ q: v(`fq_q_${i}`) || '', a: v(`fq_a_${i}`) || '' }));
+}
+function renderFaqList() {
+  const c = document.getElementById('faqList'); if (!c) return;
+  c.innerHTML = '';
+  if (faqs.length === 0) { c.innerHTML = '<p style="font-size:12px;color:#bbb;padding:8px 0;">Q&A はまだ登録されていません</p>'; return; }
+  faqs.forEach((f, i) => {
+    const d = document.createElement('div'); d.className = 'feat-item';
+    d.innerHTML = `
+      <div class="item-hd">
+        <span class="feat-num">${String(i+1).padStart(2,'0')}</span>
+        <button class="btn-del" onclick="deleteFaq(${i})" title="この Q&A を削除">✕</button>
+      </div>
+      <div class="fg" style="margin-bottom:10px;"><label>質問（Q）</label><input id="fq_q_${i}" value="${esc(f.q)}" placeholder="例：予約方法を教えてください。"></div>
+      <div class="fg"><label>回答（A）</label><textarea id="fq_a_${i}" rows="3">${esc(f.a)}</textarea></div>`;
+    c.appendChild(d);
+  });
+}
+function addFaq() {
+  syncFaqValues();
+  faqs.push({q:'', a:''});
+  renderFaqList();
+  saveData();
+  showToast('Q&A を追加しました');
+}
+function deleteFaq(i) {
+  syncFaqValues();
+  faqs.splice(i, 1);
+  renderFaqList();
+  saveData();
+  showToast('Q&A を削除しました');
+}
 
 /* ===== 予約リンク管理 ===== */
 let reserveLinks = [];
@@ -819,6 +880,7 @@ function collectData() {
     menus:    menus.map((_,i) => ({icon:v(`mi_icon_${i}`), name:v(`mi_name_${i}`), nameJp:v(`mi_jp_${i}`), desc:v(`mi_desc_${i}`), price:v(`mi_price_${i}`)})),
     features: feats.map((_,i) => ({title:v(`fi_title_${i}`), sub:v(`fi_sub_${i}`), desc:v(`fi_desc_${i}`)})),
     voices:   voices.map((_,i) => ({stars:parseInt(v(`vi_stars_${i}`))||5, text:v(`vi_text_${i}`), author:v(`vi_author_${i}`)})),
+    faqs:     faqs.map((_,i)  => ({q:v(`fq_q_${i}`)||'', a:v(`fq_a_${i}`)||''})),
     fonts: {
       logo:    v('fontLogo')    || 'Great Vibes',
       heading: v('fontHeading') || 'Cormorant Garamond',
@@ -831,6 +893,7 @@ function collectData() {
       feature: visCheck('feature'),
       gallery: visCheck('gallery'),
       voice:   visCheck('voice'),
+      faq:     visCheck('faq'),
       access:  visCheck('access'),
     },
   };
@@ -858,6 +921,7 @@ function loadData() {
     if (d.menus)    { menus = d.menus; renderMenuGrid(); menus.forEach((m,i) => { set(`mi_icon_${i}`,m.icon); set(`mi_name_${i}`,m.name); set(`mi_jp_${i}`,m.nameJp); set(`mi_desc_${i}`,m.desc); set(`mi_price_${i}`,m.price); }); }
     if (d.features) { feats = d.features; renderFeatList(); feats.forEach((f,i) => { set(`fi_title_${i}`,f.title); set(`fi_sub_${i}`,f.sub); set(`fi_desc_${i}`,f.desc); }); }
     if (d.voices) { voices = d.voices; renderVoiceGrid(); voices.forEach((vv,i) => { set(`vi_stars_${i}`,vv.stars); set(`vi_text_${i}`,vv.text); set(`vi_author_${i}`,vv.author); }); }
+    if (d.faqs)   { faqs   = d.faqs;   renderFaqList();  faqs.forEach((f,i)   => { set(`fq_q_${i}`,f.q); set(`fq_a_${i}`,f.a); }); }
     if (d.fonts) {
       set('fontLogo',    d.fonts.logo);
       set('fontHeading', d.fonts.heading);
@@ -1074,7 +1138,18 @@ function buildHTML(d) {
   if (d.hours)     _sd.openingHours = d.hours;
   if (d.siteUrl)   _sd.url = d.siteUrl;
   if (d.hotpepper) _sd.sameAs = d.hotpepper;
+  /* AggregateRating：お客様の声の星評価から自動算出 */
+  const validVoices = (d.voices || []).filter(vv => vv.stars >= 1 && vv.stars <= 5);
+  if (validVoices.length > 0) {
+    const avg = validVoices.reduce((s, vv) => s + vv.stars, 0) / validVoices.length;
+    _sd.aggregateRating = {"@type":"AggregateRating","ratingValue":avg.toFixed(1),"reviewCount":String(validVoices.length),"bestRating":"5","worstRating":"1"};
+  }
   const schemaScript = '<scr'+'ipt type="application/ld+json">'+JSON.stringify(_sd)+'<\/scr'+'ipt>';
+  /* FAQPage スキーマ */
+  const validFaqs = (d.faqs || []).filter(f => f.q && f.a);
+  const faqSchemaScript = validFaqs.length > 0
+    ? '<scr'+'ipt type="application/ld+json">'+JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":validFaqs.map(f => ({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}}))})+'<\/scr'+'ipt>'
+    : '';
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -1188,6 +1263,18 @@ function buildHTML(d) {
     .stars{color:var(--accent);font-size:16px;letter-spacing:3px;margin-bottom:16px}
     .voice-text{font-family:${bF};font-size:13px;line-height:2;color:#555;margin-bottom:20px}
     .voice-author{font-size:11px;letter-spacing:0.15em;color:var(--accent)}
+    .faq{padding:100px 0;background:var(--white)}
+    .faq-inner{max-width:800px;margin:0 auto;padding:0 40px}
+    .faq-header{text-align:center;margin-bottom:56px}
+    .faq-list{border-top:1px solid var(--border)}
+    .faq-item{border-bottom:1px solid var(--border)}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;width:100%;padding:22px 0;background:none;border:none;cursor:pointer;text-align:left;font-family:${bF};font-size:15px;font-weight:300;color:var(--primary);letter-spacing:0.04em;gap:16px}
+    .faq-q span{flex:1;line-height:1.6}
+    .faq-arrow{flex-shrink:0;transition:transform 0.3s;color:var(--accent)}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+    .faq-item.open .faq-a{max-height:600px}
+    .faq-a p{padding:0 0 22px;font-family:${bF};font-size:14px;color:#555;line-height:1.9;font-weight:300}
     .access{background:var(--white)}
     .access-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
     /* ★ マップを固定高さで確実に収める */
@@ -1331,6 +1418,25 @@ ${show('voice')?`<section class="voice">
   </div>
 </section>`:''}
 
+${show('faq') && validFaqs.length > 0 ? `<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">よくある質問</h2>
+      <div class="divider" style="margin:20px auto;"></div>
+    </div>
+    <div class="faq-list">
+      ${validFaqs.map((f,i) => `<div class="faq-item">
+        <button class="faq-q" onclick="var p=this.parentElement;var open=p.classList.toggle('open');this.setAttribute('aria-expanded',open)" aria-expanded="false">
+          <span>${esc(f.q)}</span>
+          <svg class="faq-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-a"><p>${esc(f.a)}</p></div>
+      </div>`).join('\n      ')}
+    </div>
+  </div>
+</section>` : ''}
+
 ${d.line ? `<section class="line-cta">
   <div class="line-cta-inner">
     <svg class="line-cta-icon" width="64" height="64" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
@@ -1407,6 +1513,7 @@ ${show('access')?`<section class="access" id="access">
 
 
 ${schemaScript}
+${faqSchemaScript}
 </body>
 </html>`;
 }
@@ -1439,6 +1546,7 @@ function showToast(msg) {
 renderMenuGrid();
 initFeatList();
 initVoiceGrid();
+renderFaqList();
 renderReserveLinks();
 loadData();
 initFontPreviews();
